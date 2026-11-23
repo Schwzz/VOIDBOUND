@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AOA",
+    "EBE",
+    "AOA"
+  ],
+  "key": {
+    "A": "minecraft:amethyst_shard",
+    "O": "minecraft:obsidian",
+    "E": "minecraft:ender_pearl",
+    "B": "minecraft:book"
+  },
+  "result": {
+    "id": "voidbound:void_codex",
+    "count": 1
+  }
+}

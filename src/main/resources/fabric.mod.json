@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "voidbound",
+  "version": "${version}",
+  "name": "VOIDBOUND",
+  "description": "An ancient grimoire floats at its wielder's side.",
+  "environment": "*",
+  "icon": "assets/voidbound/textures/item/void_codex.png",
+  "entrypoints": {
+    "main": ["dev.voidbound.Voidbound"],
+    "client": ["dev.voidbound.client.VoidboundClient"]
+  },
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": "~26.3",
+    "java": ">=25",
+    "fabric-api": ">=0.161.0"
+  }
+}
