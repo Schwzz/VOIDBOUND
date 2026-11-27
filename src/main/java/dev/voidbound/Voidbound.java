@@ -1,5 +1,6 @@
 package dev.voidbound;
 
+import dev.voidbound.ability.server.ServerAbilityManager;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.minecraft.core.Registry;
@@ -22,6 +23,7 @@ public final class Voidbound implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        ServerAbilityManager.initialize();
         CreativeModeTabEvents.modifyOutputEvent(ResourceKey.create(
                 Registries.CREATIVE_MODE_TAB,
                 Identifier.fromNamespaceAndPath("minecraft", "tools_and_utilities")))

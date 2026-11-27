@@ -1,3 +1,7 @@
 {
-  "item.voidbound.void_codex": "Void Codex"
+  "item.voidbound.void_codex": "Void Codex",
+  "ability.voidbound.void_collapse": "Void Collapse",
+  "ability.voidbound.phantom_arsenal": "Phantom Arsenal",
+  "ability.voidbound.rift_walk": "Rift Walk",
+  "ability.voidbound.apocalypse": "APOCALYPSE"
 }
