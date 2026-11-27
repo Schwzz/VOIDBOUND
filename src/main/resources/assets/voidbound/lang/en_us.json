@@ -3,5 +3,13 @@
   "ability.voidbound.void_collapse": "Void Collapse",
   "ability.voidbound.phantom_arsenal": "Phantom Arsenal",
   "ability.voidbound.rift_walk": "Rift Walk",
-  "ability.voidbound.apocalypse": "APOCALYPSE"
+  "ability.voidbound.apocalypse": "APOCALYPSE",
+  "key.category.voidbound.controls": "VOIDBOUND",
+  "key.voidbound.cycle_ability": "Cycle ability",
+  "key.voidbound.activate_ability": "Activate ability",
+  "message.voidbound.selected": "Selected: %s",
+  "message.voidbound.unavailable": "%s is not available yet",
+  "message.voidbound.cooldown": "%s: %s s remaining",
+  "message.voidbound.unknown": "Unknown ability",
+  "message.voidbound.not_implemented": "This ability is not implemented yet"
 }
