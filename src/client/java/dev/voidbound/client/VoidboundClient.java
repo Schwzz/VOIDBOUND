@@ -1,5 +1,6 @@
 package dev.voidbound.client;
 
+import dev.voidbound.client.effect.ClientVisualEffects;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityRenderLayerRegistrationCallback;
@@ -9,6 +10,7 @@ public final class VoidboundClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         VoidboundControls.initialize();
+        ClientVisualEffects.initialize();
         LivingEntityRenderLayerRegistrationCallback.EVENT.register((entityType, renderer, layers, context) -> {
             if (renderer instanceof AvatarRenderer<?> avatarRenderer) {
                 layers.register(new VoidCodexLayer(avatarRenderer, context));

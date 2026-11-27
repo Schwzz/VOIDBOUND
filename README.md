@@ -32,6 +32,16 @@ The client sends only a cycle or activation request. The server checks the playe
 
 Cooldowns use overworld game ticks and pause when game time is not advancing. The cooldown status only checks registration, availability, and cooldown; it is not a complete authorization check. A future server-side ability must validate the player and Codex and execute successfully before recording a cooldown. The manager rejects cooldown recording for every currently unavailable ability.
 
+## Timelines and effects (Stage 2, M3)
+
+`Timeline` is a side-independent tick-based building block. Define named phases (which may overlap), easing and ordered one-shot cues before advancing it. Call `advance` with monotonically increasing elapsed game ticks, starting at zero; repeated ticks do not repeat cues, and skipped ticks deliver the crossed cues in order. Completion, interruption, and cue failure invoke the supplied cleanup once. For rendering, `phaseProgress` accepts the current game partial tick; sampling never runs cues. Owners are responsible for advancing timelines on the appropriate game thread and interrupting them when their world or effect is removed.
+
+Client-only `VoidParticles` provides purple dust bursts, directional emission, horizontal expanding rings and an interval-based emitter suitable for trails. Count (capped at 256 per call), lifetime, speed and positional spread are configurable. It observes the normal particle setting and 32-block camera distance. Use a seeded random generator for reproducible inputs; particle settings and camera distance may make the visible result differ between clients. Stop calling an emitter when its effect ends.
+
+`EffectSounds` broadcasts an existing positional sound from the server with adjustable volume and pitch, or schedules it as a timeline cue. Do not also play the same sound from a client visual handler. No custom sounds are included.
+
+The registered clientbound `VisualEffectPayload` carries an effect identifier, origin and seed. A future server ability can send one event to the caster and players currently tracking them via `VisualEffectNetworking`; the client dispatches it to a handler registered under that identifier. Unknown identifiers are ignored. No handlers or spell effects are registered in M3. This is a one-shot notification, not a persistent effect manager: it does not synchronize timelines, moving positions, late joiners or world-space recipients. Each server call sends a new event; callers must avoid sending the same event twice. Ability validation and gameplay remain server-side.
+
 ## Current limitations
 
 - First-person floating-book rendering is **not implemented**. In first person, the held item uses its ordinary item icon and the local ambient dust is hidden.

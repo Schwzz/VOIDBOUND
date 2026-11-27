@@ -15,6 +15,7 @@ public final class AbilityNetworking {
 
     public static void initialize() {
         PayloadTypeRegistry.serverboundPlay().register(AbilityRequestPayload.TYPE, AbilityRequestPayload.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(VisualEffectPayload.TYPE, VisualEffectPayload.CODEC);
         ServerPlayNetworking.registerGlobalReceiver(AbilityRequestPayload.TYPE,
                 (payload, context) -> handleRequest(context.player(), payload.action()));
     }
