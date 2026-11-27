@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import dev.voidbound.Voidbound;
 import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.object.book.BookModel;
 import net.minecraft.client.model.player.PlayerModel;
 import net.minecraft.client.renderer.SubmitNodeCollector;
@@ -26,7 +27,7 @@ public final class VoidCodexLayer extends RenderLayer<AvatarRenderState, PlayerM
 
     public VoidCodexLayer(AvatarRenderer<?> renderer, EntityRendererProvider.Context context) {
         super(renderer);
-        this.book = new BookModel(context.bakeLayer(ModelLayers.BOOK));
+        this.book = new CodexBookModel(context.bakeLayer(ModelLayers.BOOK));
     }
 
     @Override
@@ -39,11 +40,10 @@ public final class VoidCodexLayer extends RenderLayer<AvatarRenderState, PlayerM
         }
 
         float time = state.ageInTicks;
-        float sweep = VoidCodexMotion.pageSweep(time);
-        float flutter = (float) Math.sin(time * 0.13F) * 0.009F;
-        float firstPage = 0.022F + flutter + 0.94F * sweep;
-        float secondPage = 0.978F - flutter - 0.16F * sweep;
-        BookModel.State bookState = BookModel.State.forAnimation(time, firstPage, secondPage, 0.78F);
+        float turn = VoidCodexMotion.pageTurn(time);
+        float idlePage = 0.02F + (float) Math.sin(time * 0.065F) * 0.002F;
+        float openness = 0.975F + (float) Math.sin(time * 0.032F) * 0.018F;
+        BookModel.State bookState = new BookModel.State(openness, turn, idlePage);
 
         poseStack.pushPose();
         poseStack.translate(
@@ -51,13 +51,32 @@ public final class VoidCodexLayer extends RenderLayer<AvatarRenderState, PlayerM
                 VoidCodexMotion.HEIGHT - VoidCodexMotion.bob(time)
                         + (state.isCrouching ? VoidCodexMotion.CROUCH_DROP : 0.0F),
                 VoidCodexMotion.DEPTH);
-        poseStack.rotateDegrees(Axis.YP, 16.0F + (float) Math.sin(time * 0.041F) * 8.0F);
-        poseStack.rotateDegrees(Axis.ZP, 78.0F + (float) Math.sin(time * 0.052F) * 2.5F);
-        poseStack.rotateDegrees(Axis.XP, -8.0F + (float) Math.sin(time * 0.038F) * 3.0F);
+        poseStack.rotateDegrees(Axis.YP, 165.0F + (float) Math.sin(time * 0.041F) * 4.0F);
+        poseStack.rotateDegrees(Axis.ZP, (float) Math.sin(time * 0.052F) * 1.5F);
+        poseStack.rotateDegrees(Axis.XP, -2.0F + (float) Math.sin(time * 0.038F) * 1.5F);
         poseStack.scale(0.78F, 0.78F, 0.78F);
 
         collector.submitModel(book, bookState, poseStack, BOOK_TEXTURE, lightCoords, OverlayTexture.NO_OVERLAY, 0);
         collector.submitModel(book, bookState, poseStack, GLOW_RENDER_TYPE, lightCoords, OverlayTexture.NO_OVERLAY, 0);
         poseStack.popPose();
+    }
+
+    private static final class CodexBookModel extends BookModel {
+        private final ModelPart turningPage;
+        private final ModelPart idlePage;
+
+        private CodexBookModel(ModelPart root) {
+            super(root);
+            this.turningPage = root.getChild("flip_page1");
+            this.idlePage = root.getChild("flip_page2");
+        }
+
+        @Override
+        public void setupAnim(BookModel.State state) {
+            super.setupAnim(state);
+            // Reset the turning page while hidden instead of snapping it back across the book.
+            this.turningPage.visible = state.pageFlip1() >= 0.0F;
+            this.idlePage.visible = !this.turningPage.visible;
+        }
     }
 }
